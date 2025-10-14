@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="Y1_SALES_MONITOR_DFLC_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="Sale" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="SaleID"/>
+                </Key>
+                <Property Name="SaleID" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Sales ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreationDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Creation Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Description" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Sales Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CustomerID" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Customer ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="NetValue" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:unit="Currency" sap:label="Sales Net Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Currency" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Sales Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="CreatedBy" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Created By" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="customer" Relationship="Y1_SALES_MONITOR_DFLC_SRV.SalesToCustomer" FromRole="FromRole_SalesToCustomer" ToRole="ToRole_SalesToCustomer" sap:label="Sale To Customer"/>
+                <NavigationProperty Name="sender" Relationship="Y1_SALES_MONITOR_DFLC_SRV.SalesToCustomer" FromRole="FromRole_SalesToCustomer" ToRole="ToRole_SalesToCustomer" sap:label="Sale To Sender"/>
+                <NavigationProperty Name="payer" Relationship="Y1_SALES_MONITOR_DFLC_SRV.SalesToCustomer" FromRole="FromRole_SalesToCustomer" ToRole="ToRole_SalesToCustomer" sap:label="Sale To Payer"/>
+                <NavigationProperty Name="items" Relationship="Y1_SALES_MONITOR_DFLC_SRV.SaleToSaleItem" FromRole="FromRole_SaleToSaleItem" ToRole="ToRole_SaleToSaleItem" sap:label="Sale To Items"/>
+            </EntityType>
+            <EntityType Name="SaleItem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="SaleID"/>
+                </Key>
+                <Property Name="SaleID" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Sales ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Item" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Sales Item" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Sales Material" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Quantity" Type="Edm.Decimal" Nullable="false" Precision="9" Scale="4" sap:unicode="false" sap:unit="Unit" sap:label="Sales Quantity" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Unit" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Sales Unit" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="unit-of-measure"/>
+                <Property Name="NetValue" Type="Edm.Decimal" Nullable="false" Precision="16" Scale="3" sap:unicode="false" sap:label="Sales Net Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="Customer" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="CustomerID"/>
+                </Key>
+                <Property Name="CustomerID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="Customer ID" sap:updatable="false"/>
+                <Property Name="CustomerName" Type="Edm.String" sap:unicode="false" sap:label="Customer Name"/>
+                <Property Name="Phone" Type="Edm.String" sap:unicode="false" sap:label="Phone" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="UF" Type="Edm.String" sap:unicode="false" sap:label="UF"/>
+                <Property Name="Email" Type="Edm.String" sap:unicode="false" sap:label="Email" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Status" Type="Edm.String" sap:unicode="false" sap:label="Status" sap:sortable="false"/>
+                <NavigationProperty Name="sales" Relationship="Y1_SALES_MONITOR_DFLC_SRV.CustomerToSales" FromRole="FromRole_CustomerToSales" ToRole="ToRole_CustomerToSales" sap:label="Customer To Sale"/>
+            </EntityType>
+            <EntityType Name="Attachment" m:HasStream="true" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="File ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="FileName" Type="Edm.String" Nullable="false" MaxLength="100" sap:unicode="false" sap:label="Filename" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="MimeType" Type="Edm.String" Nullable="false" MaxLength="100" sap:unicode="false" sap:label="MimeType" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Value" Type="Edm.Binary" Nullable="false" sap:unicode="false" sap:label="File Value" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Created Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CreatedTime" Type="Edm.Time" Nullable="false" Precision="0" sap:unicode="false" sap:label="Created Time" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <Association Name="CustomerToSales" sap:content-version="1" sap:label="Customer To Sales">
+                <End Type="Y1_SALES_MONITOR_DFLC_SRV.Customer" Multiplicity="1" Role="FromRole_CustomerToSales"/>
+                <End Type="Y1_SALES_MONITOR_DFLC_SRV.Sale" Multiplicity="*" Role="ToRole_CustomerToSales"/>
+            </Association>
+            <Association Name="SalesToCustomer" sap:content-version="1" sap:label="Sales To Customer">
+                <End Type="Y1_SALES_MONITOR_DFLC_SRV.Sale" Multiplicity="1" Role="FromRole_SalesToCustomer"/>
+                <End Type="Y1_SALES_MONITOR_DFLC_SRV.Customer" Multiplicity="1" Role="ToRole_SalesToCustomer"/>
+            </Association>
+            <Association Name="SaleToSaleItem" sap:content-version="1" sap:label="Sale to SaleItem">
+                <End Type="Y1_SALES_MONITOR_DFLC_SRV.Sale" Multiplicity="1" Role="FromRole_SaleToSaleItem"/>
+                <End Type="Y1_SALES_MONITOR_DFLC_SRV.SaleItem" Multiplicity="*" Role="ToRole_SaleToSaleItem"/>
+            </Association>
+            <EntityContainer Name="Y1_SALES_MONITOR_DFLC_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="Sales" EntityType="Y1_SALES_MONITOR_DFLC_SRV.Sale" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="SaleItems" EntityType="Y1_SALES_MONITOR_DFLC_SRV.SaleItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="Customers" EntityType="Y1_SALES_MONITOR_DFLC_SRV.Customer" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="Attachments" EntityType="Y1_SALES_MONITOR_DFLC_SRV.Attachment" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <AssociationSet Name="SalesToCustomer_AssocSet" Association="Y1_SALES_MONITOR_DFLC_SRV.SalesToCustomer" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="Sales" Role="FromRole_SalesToCustomer"/>
+                    <End EntitySet="Customers" Role="ToRole_SalesToCustomer"/>
+                </AssociationSet>
+                <AssociationSet Name="CustomerToSales_AssocSet" Association="Y1_SALES_MONITOR_DFLC_SRV.CustomerToSales" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="Customers" Role="FromRole_CustomerToSales"/>
+                    <End EntitySet="Sales" Role="ToRole_CustomerToSales"/>
+                </AssociationSet>
+                <AssociationSet Name="SaleToSaleItem_AssocSet" Association="Y1_SALES_MONITOR_DFLC_SRV.SaleToSaleItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="Sales" Role="FromRole_SaleToSaleItem"/>
+                    <End EntitySet="SaleItems" Role="ToRole_SaleToSaleItem"/>
+                </AssociationSet>
+                <FunctionImport Name="ChangeStatus" ReturnType="Y1_SALES_MONITOR_DFLC_SRV.Customer" EntitySet="Customers" m:HttpMethod="GET" sap:label="ChangeStatus" sap:action-for="Y1_SALES_MONITOR_DFLC_SRV.Customer">
+                    <Parameter Name="CustomerID" Type="Edm.String" Mode="In"/>
+                </FunctionImport>
+            </EntityContainer>
+            <atom:link rel="self" href="http://vhcalnplci:8000/sap/opu/odata/sap/Y1_SALES_MONITOR_DFLC_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://vhcalnplci:8000/sap/opu/odata/sap/Y1_SALES_MONITOR_DFLC_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

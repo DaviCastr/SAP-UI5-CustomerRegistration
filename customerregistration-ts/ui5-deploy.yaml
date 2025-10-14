@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.5"
+metadata:
+  name: apps.dflc.customerregistrationts
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: http://vhcalnplci:8000
+          client: "001"
+        app:
+          name: YY1_CSTRTS_DFLC
+          description: Customer Registration Ts
+          package: Y1_CUSTOMER_REGISTRATION_DFLC
+          transport: NPLK900075
