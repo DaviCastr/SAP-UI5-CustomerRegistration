@@ -1,4 +1,4 @@
-sap.ui.define(["sap/ui/core/Element", "sap/ui/unified/FileUploaderParameter", "./BaseController", "sap/m/MessageToast", "sap/ui/unified/library"], function(Element, FileUploaderParameter, __BaseController, MessageToast, sap_ui_unified_library) {
+sap.ui.define(["sap/ui/core/Element", "sap/ui/unified/FileUploaderParameter", "./BaseController", "sap/m/MessageToast", "sap/ui/unified/library"], function (Element, FileUploaderParameter, __BaseController, MessageToast, sap_ui_unified_library) {
     "use strict";
 
     function _interopRequireDefault(obj) {
@@ -56,7 +56,20 @@ sap.ui.define(["sap/ui/core/Element", "sap/ui/unified/FileUploaderParameter", ".
             oFileUploader.setSendXHR(true);
             Attachments.oBaseController.clearAllMessages();
             this.oView.setBusy(true);
-            oFileUploader.upload();
+            try {
+                oFileUploader.upload();
+            } catch (error) {
+
+                this.oView.setBusy(false);
+
+                const oError = error;
+
+                if (oError) {
+
+                    Attachments.oBaseController.addGenericMessageToMessageManager(oError.message, "error")
+
+                }
+            }
         }
         static handleUploadComplete(oEvent, response) {
             this.oView.setBusy(false);
@@ -118,9 +131,9 @@ sap.ui.define(["sap/ui/core/Element", "sap/ui/unified/FileUploaderParameter", ".
             Attachments.oBaseController.clearAllMessages();
             for (const oItem of oItens) {
                 this.oModel.remove(`${oItem.getPath()}/$value`, {
-                    success: (oData, response) => {}
+                    success: (oData, response) => { }
                     ,
-                    error: error => {}
+                    error: error => { }
                 });
             }
         }
@@ -191,7 +204,22 @@ sap.ui.define(["sap/ui/core/Element", "sap/ui/unified/FileUploaderParameter", ".
             oFileUploader.setSendXHR(true);
             oFileUploader.setUploadUrl(`/sap/opu/odata/sap/Y1_SALES_MONITOR_DFLC_SRV${oPath}/$value`);
             this.oView.setBusy(true);
-            oFileUploader.upload();
+
+            try {
+                oFileUploader.upload();
+            } catch (error) {
+
+                this.oView.setBusy(false);
+
+                const oError = error;
+
+                if (oError) {
+
+                    Attachments.oBaseController.addGenericMessageToMessageManager(oError.message, "error")
+
+                }
+            }
+
         }
         static _findControlInRegistry(sControlType, sIdPartial) {
             // Cast para acessar o registry interno

@@ -6,8 +6,8 @@
     "conn_user": "",
     "conn_password": "",
     "abap_package": "Y1_CUSTOMER_REGISTRATION_DFLC",
-    "abap_bsp": "YY1_CSTRTS_DFLC",
-    "abap_bsp_text": "Customer Registration Ts",
+    "abap_bsp": "YY1_CSTRJS_DFLC",
+    "abap_bsp_text": "Customer Registration Js",
     "abap_language": "EN",
     "abap_transport": "NPLK900075"
 }

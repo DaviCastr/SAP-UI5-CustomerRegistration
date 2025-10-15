@@ -19,7 +19,8 @@
         "eslint": "7.32.0",
         "eslint-plugin-fiori-custom": "2.2.1",
         "rimraf": "^3.0.2",
-        "ui5-task-flatten-library": "0.2.5"
+        "ui5-task-flatten-library": "0.2.5",
+        "nwabap-ui5uploader": "^1.2.0"
     },
     "scripts": {
         "start": "fiori run --open \"test/flpSandbox.html?sap-client=001&sap-ui-xx-viewCache=false#appsdflccustomerregistration-display\"",
@@ -27,6 +28,7 @@
         "build": "ui5 build --config=ui5.yaml --clean-dest --dest dist",
         "lint": "eslint ./ --rulesdir ./node_modules/eslint-plugin-fiori-custom/lib/rules/",
         "deploy": "npm run build && fiori deploy --config ui5-deploy.yaml && rimraf archive.zip",
+        "deploy-nwabap": "npx nwabap upload",
         "deploy-config": "fiori add deploy-config",
         "start-noflp": "fiori run --open \"index.html?sap-client=001&sap-ui-xx-viewCache=false\"",
         "start-mock": "fiori run --config ./ui5-mock.yaml --open \"test/flpSandbox.html?sap-client=001&sap-ui-xx-viewCache=false#appsdflccustomerregistration-display\"",
@@ -43,5 +45,8 @@
             "ui5-task-flatten-library"
         ]
     },
-    "sapuxLayer": "CUSTOMER_BASE"
+    "sapuxLayer": "CUSTOMER_BASE",
+    "dependencies": {
+        
+    }
 }

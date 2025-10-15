@@ -60,7 +60,7 @@ export default class Attachments {
             return;
         }
 
-        if(!oFileUploader.getValue()){
+        if (!oFileUploader.getValue()) {
             let oMessage = this.oI18n.getText("selectAtLeastOneFile") as string;
             Attachments.oBaseController.addGenericMessageToMessageManager(oMessage, "error" as MessageType,)
             return;
@@ -88,7 +88,18 @@ export default class Attachments {
 
         this.oView.setBusy(true);
 
-        oFileUploader.upload();
+        try {
+            oFileUploader.upload();
+        } catch (error: any) {
+
+            this.oView.setBusy(false);
+
+            const oError: Error = error;
+
+            if (oError) {
+                Attachments.oBaseController.addGenericMessageToMessageManager(oError.message, "error" as MessageType,)
+            }
+        }
 
     }
 
@@ -256,7 +267,7 @@ export default class Attachments {
             return;
         }
 
-        if(!oFileUploader.getValue()){
+        if (!oFileUploader.getValue()) {
             let oMessage = this.oI18n.getText("selectAtLeastOneFile") as string;
             Attachments.oBaseController.addGenericMessageToMessageManager(oMessage, "error" as MessageType,)
             return;
@@ -282,7 +293,18 @@ export default class Attachments {
 
         this.oView.setBusy(true);
 
-        oFileUploader.upload();
+        try {
+            oFileUploader.upload();
+        } catch (error: any) {
+
+            this.oView.setBusy(false);
+
+            const oError: Error = error;
+
+            if (oError) {
+                Attachments.oBaseController.addGenericMessageToMessageManager(oError.message, "error" as MessageType,)
+            }
+        }
 
     }
 
