@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="apps.dflc.customerregistrationts.controller.Create"
+    controllerName="apps.dflc.customerregistration.controller.Create"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:f="sap.ui.layout.form"

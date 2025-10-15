@@ -90,7 +90,6 @@
                 "preload": true,
                 "settings": {
                     "defaultBindingMode": "TwoWay"
-                    
                 }
             }
         },

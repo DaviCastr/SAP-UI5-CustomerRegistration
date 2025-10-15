@@ -1,115 +1,135 @@
-sap.ui.define([
-    "./BaseController",
-    "sap/ui/model/json/JSONModel",
-    "sap/ui/core/routing/History",
-    "../model/formatter"
-], function (BaseController, JSONModel, History, formatter) {
+sap.ui.define(["sap/ui/model/json/JSONModel", "./BaseController", "sap/m/MessageToast"], function(JSONModel, __BaseController, MessageToast) {
     "use strict";
 
-    return BaseController.extend("apps.dflc.customerregistration.controller.Object", {
-
-        formatter: formatter,
-
-        /* =========================================================== */
-        /* lifecycle methods                                           */
-        /* =========================================================== */
-
+    function _interopRequireDefault(obj) {
+        return obj && obj.__esModule && typeof obj.default !== "undefined" ? obj.default : obj;
+    }
+    const BaseController = _interopRequireDefault(__BaseController);
+    /**
+   * @namespace apps.dflc.customerregistration
+   */
+    const Object = BaseController.extend("apps.dflc.customerregistration.Object", {
         /**
-         * Called when the worklist controller is instantiated.
-         * @public
-         */
-        onInit : function () {
+     * Called when the object controller is instantiated.
+     *
+     */
+        onInit: function _onInit() {
             // Model used to manipulate control states. The chosen values make sure,
             // detail page shows busy indication immediately so there is no break in
             // between the busy indication for loading the view's meta data
-            var oViewModel = new JSONModel({
-                    busy : true,
-                    delay : 0
-                });
-            this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
-            this.setModel(oViewModel, "objectView");
+            var viewModel = new JSONModel({
+                busy: true,
+                delay: 0
+            });
+            this.getRouter().getRoute("object").attachPatternMatched(this.onObjectMatched, this);
+            this.setModel(viewModel, "objectView");
+            this.oI18n = this.getResourceBundle();
+            this.initializeMessageManageModel();
         },
-        /* =========================================================== */
-        /* event handlers                                              */
-        /* =========================================================== */
+        //Custom methods
+        onSave: function _onSave(event) {
+            const oModel = this.getModel();
+            const oPath = this.getView()?.getBindingContext()?.getPath();
 
+            //Will works if you set "defaultBindingMode": "TwoWay" on model at manifest.json
+            const oContent = this.getView()?.getBindingContext()?.getObject();
+            //Dont get the fields with new values, but is for testing
 
-        /**
-         * Event handler  for navigating back.
-         * It there is a history entry we go one step back in the browser history
-         * If not, it will replace the current entry of the browser history with the worklist route.
-         * @public
-         */
-        onNavBack : function() {
-            var sPreviousHash = History.getInstance().getPreviousHash();
-            if (sPreviousHash !== undefined) {
-                // eslint-disable-next-line sap-no-history-manipulation
-                history.go(-1);
+            if (oPath && oContent) {
+                this.clearAllMessages();
+                oModel.update(oPath, oContent, {
+                    success: (oData, response) => {
+                        MessageToast.show("Data saved successfully!");
+                    }
+                    ,
+                    //this._onBindViewSuccess.bind(this),
+                    error: Error => {
+                        debugger ;
+                    }
+                    //this._onBindViewError.bind(this),
+                });
+            }
+
+            // oModel.submitChanges({
+            //     success: this._onSaveSuccess.bind(this),
+            //     error: this._onSaveError.bind(this),
+            // });
+        },
+        onSaveTwo: function _onSaveTwo(event) {
+            const oModel = this.getModel();
+            const oPath = this.getView()?.getBindingContext()?.getPath();
+            if (oModel.hasPendingChanges()) {
+                this.clearAllMessages();
+                oModel.submitChanges({
+                    success: (oData, response) => {
+                        MessageToast.show(this.oI18n?.getText("saveSuccessMessage"));
+                    }
+                    ,
+                    //this._onSaveSuccess.bind(this),
+                    error: (oError, response) => {
+                        debugger ;
+                    }
+                    //this._onSaveError.bind(this),
+                });
             } else {
-                this.getRouter().navTo("worklist", {}, true);
+                MessageToast.show(this.oI18n?.getText("saveNothingngessage"));
             }
         },
-
-        /* =========================================================== */
-        /* internal methods                                            */
-        /* =========================================================== */
-
-        /**
-         * Binds the view to the object path.
-         * @function
-         * @param {sap.ui.base.Event} oEvent pattern match event in route 'object'
-         * @private
-         */
-        _onObjectMatched : function (oEvent) {
-            var sObjectId =  oEvent.getParameter("arguments").objectId;
-            this._bindView("/Customers" + sObjectId);
+        onCancel: function _onCancel(event) {
+            const oModel = this.getView()?.getModel();
+            if (!oModel.hasPendingChanges()) {
+                MessageToast.show(this.oI18n?.getText("cancelSaveMessage"));
+                return;
+            } else {
+                oModel.resetChanges();
+            }
         },
-
         /**
-         * Binds the view to the object path.
-         * @function
-         * @param {string} sObjectPath path to the object to be bound
-         * @private
-         */
-        _bindView : function (sObjectPath) {
-            var oViewModel = this.getModel("objectView");
-
+     * Binds the view to the object path.
+     *
+     * @param event pattern match event in route 'object'
+     */
+        onObjectMatched: function _onObjectMatched(event) {
+            var sObjectId = event.getParameter("arguments").objectId;
+            this.bindView("/Customers" + sObjectId);
+        },
+        /**
+     * Binds the view to the object path.
+     *
+     * @param objectPath path to the object to be bound
+     */
+        bindView: function _bindView(objectPath) {
+            const viewModel = this.getModel("objectView");
             this.getView().bindElement({
-                path: sObjectPath,
+                path: objectPath,
                 events: {
-                    change: this._onBindingChange.bind(this),
-                    dataRequested: function () {
-                        oViewModel.setProperty("/busy", true);
+                    change: this.onBindingChange.bind(this),
+                    dataRequested: function() {
+                        viewModel.setProperty("/busy", true);
                     },
-                    dataReceived: function () {
-                        oViewModel.setProperty("/busy", false);
+                    dataReceived: function() {
+                        viewModel.setProperty("/busy", false);
                     }
                 }
             });
         },
-
-        _onBindingChange : function () {
-            var oView = this.getView(),
-                oViewModel = this.getModel("objectView"),
-                oElementBinding = oView.getElementBinding();
+        onBindingChange: function _onBindingChange() {
+            const view = this.getView();
+            const viewModel = this.getModel("objectView");
+            const elementBinding = view.getElementBinding();
 
             // No data for the binding
-            if (!oElementBinding.getBoundContext()) {
+            if (!elementBinding?.getBoundContext()) {
                 this.getRouter().getTargets().display("objectNotFound");
                 return;
             }
-
-            var oResourceBundle = this.getResourceBundle(),
-                oObject = oView.getBindingContext().getObject(),
-                sObjectId = oObject.CustomerName,
-                sObjectName = oObject.Customers;
-
-                oViewModel.setProperty("/busy", false);
-                oViewModel.setProperty("/shareSendEmailSubject",
-                    oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
-                oViewModel.setProperty("/shareSendEmailMessage",
-                    oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
+            const detailObject = view.getBindingContext().getObject();
+            const id = detailObject.CustomerName;
+            const name = detailObject.Customers;
+            viewModel.setProperty("/busy", false);
+            viewModel.setProperty("/shareSendEmailSubject", this.getResourceBundle().getText("shareSendEmailObjectSubject", [id]));
+            viewModel.setProperty("/shareSendEmailMessage", this.getResourceBundle().getText("shareSendEmailObjectMessage", [name, id, location.href]));
         }
     });
-
+    return Object;
 });

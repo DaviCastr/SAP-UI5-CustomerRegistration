@@ -87,7 +87,9 @@
             "": {
                 "dataSource": "mainService",
                 "preload": true,
-                "settings": {}
+                "settings": {
+                    "defaultBindingMode": "TwoWay"
+                }
             }
         },
         "resources": {
@@ -121,6 +123,11 @@
                     "target": [
                         "object"
                     ]
+                },
+                {
+                    "pattern": "create",
+                    "name": "create",
+                    "target": "create"
                 }
             ],
             "targets": {
@@ -143,6 +150,11 @@
                 "notFound": {
                     "viewName": "NotFound",
                     "viewId": "notFound"
+                },
+                "create": {
+                    "viewId": "create",
+                    "viewName": "Create",
+                    "viewLevel": 2
                 }
             }
         },

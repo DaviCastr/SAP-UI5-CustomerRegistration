@@ -2,7 +2,7 @@
     xmlns="sap.m"
     xmlns:c="sap.ui.core"
     xmlns:u="sap.ui.unified"
-    c:require="{ handler: 'apps/dflc/customerregistrationts/controller/Attachments'}"
+    c:require="{ handler: 'apps/dflc/customerregistration/controller/Attachments'}"
 >
     <VBox id="_IDGenVBox1" >
         <Table

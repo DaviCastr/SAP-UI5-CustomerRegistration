@@ -182,7 +182,7 @@
                         </content>
                     </IconTabFilter>
 
-                    <IconTabFilter
+                    <IconTabFilter id="_IDGenIconTabFilter2"
                         text="{i18n>titleSales}"
                         key="key2"
                     >

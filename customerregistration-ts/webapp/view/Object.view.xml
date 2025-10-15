@@ -15,25 +15,25 @@
         showFooter="true"
     >
         <semantic:titleHeading>
-            <Title
+            <Title id="_IDGenTitle2"
                 text="{CustomerName}"
                 level="H2"
             />
         </semantic:titleHeading>
 
         <semantic:headerContent>
-            <ObjectNumber unit="{UF}" />
+            <ObjectNumber id="_IDGenObjectNumber" unit="{UF}" />
         </semantic:headerContent>
 
         <semantic:sendEmailAction>
             <semantic:SendEmailAction
-                id="shareEmail"
+                id="shareEmail2"
                 press=".onShareEmailPress"
             />
         </semantic:sendEmailAction>
 
-        <l:VerticalLayout width="100%">
-            <f:SimpleForm
+        <l:VerticalLayout id="_IDGenVerticalLayout" width="100%">
+            <f:SimpleForm id="_IDGenSimpleForm1"
                 editable="true"
                 layout="ResponsiveGridLayout"
                 labelSpanXL="3"
@@ -50,20 +50,20 @@
                 columnsM="1"
                 singleContainerFullSize="false"
             >
-                <Label text="{i18n>tableCodeColumnTitle}" />
-                <Text text="{CustomerID}" />
+                <Label id="_IDGenLabel5" text="{i18n>tableCodeColumnTitle}" />
+                <Text id="_IDGenText4" text="{CustomerID}" />
 
-                <Label text="{i18n>tableNameColumnTitle}" />
+                <Label id="_IDGenLabel6" text="{i18n>tableNameColumnTitle}" />
                 <Input
                     value="{CustomerName}"
                     id="inputCustomerName"
                 />
 
-                <Label text="{i18n>tablePhoneColumnTitle}" />
-                <Input value="{Phone}" />
+                <Label id="_IDGenLabel7" text="{i18n>tablePhoneColumnTitle}" />
+                <Input id="_IDGenInput1" value="{Phone}" />
 
-                <Label text="{i18n>tableUnitNumberColumnTitle}" />
-                <Input value="{UF}" />
+                <Label id="_IDGenLabel8" text="{i18n>tableUnitNumberColumnTitle}" />
+                <Input id="_IDGenInput2" value="{UF}" />
             </f:SimpleForm>
 
             <List
@@ -86,15 +86,15 @@
                     }"
             >
                 <items>
-                    <ObjectListItem
+                    <ObjectListItem id="_IDGenObjectListItem"
                         title="{Description}"
                         number="{NetValue}"
                         numberState="{=	${NetValue} > 500 ? 'Error' : 'Success' }"
                     >
                         <attributes>
-                            <ObjectAttribute text="{SaleID}" />
-                            <ObjectAttribute text="{CreationDate}" />
-                            <ObjectAttribute text="{customer/Email}" />
+                            <ObjectAttribute id="_IDGenObjectAttribute1" text="{SaleID}" />
+                            <ObjectAttribute id="_IDGenObjectAttribute2" text="{CreationDate}" />
+                            <ObjectAttribute id="_IDGenObjectAttribute3" text="{customer/Email}" />
                         </attributes>
                     </ObjectListItem>
                 </items>
@@ -102,11 +102,11 @@
         </l:VerticalLayout>
 
         <semantic:positiveAction>
-			<semantic:PositiveAction text="{i18n>btnSave}" press="onSaveTwo" />
+			<semantic:PositiveAction id="_IDGenPositiveAction" text="{i18n>btnSave}" press="onSaveTwo" />
 		</semantic:positiveAction>
 
 		<semantic:negativeAction>
-			<semantic:NegativeAction text="{i18n>btnCancel}"  press="onCancel" />
+			<semantic:NegativeAction id="_IDGenNegativeAction" text="{i18n>btnCancel}"  press="onCancel" />
 		</semantic:negativeAction>
 
         <semantic:footerCustomActions>

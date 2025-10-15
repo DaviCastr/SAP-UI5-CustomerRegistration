@@ -3,14 +3,13 @@
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc">
 
-    <MessagePage
+    <MessagePage id="_IDGenMessagePage"
         title="{i18n>notFoundTitle}"
         text="{i18n>notFoundText}"
         icon="sap-icon://document"
-        id="page"
         description="">
         <customDescription>
-            <Link id="link" text="{i18n>backToWorklist}" press=".onLinkPressed"/>
+            <Link id="_IDGenLink1" text="{i18n>backToWorklist}" press=".onLinkPressed"/>
         </customDescription>
     </MessagePage>
 
