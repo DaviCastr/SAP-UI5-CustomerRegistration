@@ -1,0 +1,80 @@
+<mvc:View
+    controllerName="apps.dflc.customerregistrationts.controller.Create"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        title="{i18n>createNewCustomer}"
+        showNavButton="true"
+        navButtonPress=".onNavBack"
+        floatingFooter="true"
+    >
+        <f:SimpleForm
+            editable="true"
+            layout="ResponsiveGridLayout"
+            title="Cliente"
+            labelSpanXL="3"
+            labelSpanL="3"
+            labelSpanM="3"
+            labelSpanS="12"
+            adjustLabelSpan="false"
+            emptySpanXL="4"
+            emptySpanL="4"
+            emptySpanM="4"
+            emptySpanS="0"
+            columnsXL="1"
+            columnsL="1"
+            columnsM="1"
+            singleContainerFullSize="false"
+        >
+            <Label text="{i18n>tableNameColumnTitle}" />
+            <Input
+                valueLiveUpdate="true"
+                id="inpCustomerName"
+                value="{CustomerName}"
+                maxLength="40"
+            />
+
+            <Label text="{i18n>tableUnitNumberColumnTitle}" />
+            <Input
+                value="{UF}"
+                id="inpCustomerUF"
+            />
+
+            <Label text="{i18n>tableCustomerEmailColumnTitle}" />
+            <Input
+                value="{Email}"
+                id="inpCustomerEmail"
+            />
+
+            <Label text="{i18n>tablePhoneColumnTitle}" />
+            <Input
+                value="{Phone}"
+                id="inpCustomerPhone"
+            />
+
+            <Label text="{i18n>tableCopiesColumnTitle}" />
+            <Input
+                value="{ path: 'view>/copies', type: 'sap.ui.model.type.Integer', constraints: { minimum: 0 } }"
+            />
+        </f:SimpleForm>
+
+        <footer>
+            <OverflowToolbar>
+                <ToolbarSpacer />
+                <Button
+                    type="Accept"
+                    text="{i18n>btnSave}"
+                    press="onSaveTwo"
+                />
+                <Button
+                    type="Reject"
+                    text="{i18n>btnCancel}"
+                    press="onCancel"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

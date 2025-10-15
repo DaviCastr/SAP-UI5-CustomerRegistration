@@ -1,0 +1,45 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <List
+        headerText="{i18n>titleSales}"
+        growing="true"
+        growingThreshold="4"
+        growingScrollToLoad="false"
+        class="sapUiResponsiveMargin"
+        width="auto"
+        items="{/Sales}"
+    >
+        <items>
+            <core:ExtensionPoint name="VendaItemList">
+                <ObjectListItem
+                    title="{Description}"
+                    number="{
+                    parts: [{path: 'NetValue'}, {path: 'Currency'}],
+                    type: 'sap.ui.model.type.Currency',
+                    formatOptions: {
+                        showMeasure: true
+                    }
+                }"
+                    numberState="{=	${NetValue} > 500 ? 'Error' : 'Success' }"
+                >
+                    <attributes>
+                        <ObjectAttribute text="{SaleID}" />
+                        <ObjectAttribute
+                            text="{
+					path: 'CreationDate',
+					type: 'sap.ui.model.type.Date',
+									formatOptions: 
+									{              
+									style: 'short',
+										UTC: true
+									}
+								}"
+                        />
+                    </attributes>
+                </ObjectListItem>
+            </core:ExtensionPoint>
+        </items>
+    </List>
+</core:FragmentDefinition>

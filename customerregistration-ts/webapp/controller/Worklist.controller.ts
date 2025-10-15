@@ -6,11 +6,50 @@ import ObjectListItem from "sap/m/ObjectListItem";
 import BaseController from "./BaseController";
 import Table from "sap/m/Table";
 import ListBinding from "sap/ui/model/ListBinding";
+import Sorter from "sap/ui/model/Sorter";
+import ODataModel from "sap/ui/model/odata/v2/ODataModel";
+import { AggregationBindingInfo, ObjectBindingInfo } from "sap/ui/base/ManagedObject";
+import MessageToast from "sap/m/MessageToast";
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
+import Button from "sap/m/Button";
+import Context from "sap/ui/model/Context";
+import ColumnListItem from "sap/m/ColumnListItem";
+import { MessageType } from "sap/ui/core/library";
+//import Attachments from "apps/dflc/customerregistrationts/controller/Attachments";
+
+interface CustomerObject {
+    CustomerID: string;
+}
+
+
+//Return Delete Customer
+interface OdataResponseType {
+    headers?: {
+        "sap-message"?: string;
+        "SAP-Message"?: string;
+    };
+    statusCode?: string;
+    statusText?: string;
+}
+
+interface SapMessageType {
+    code: string;
+    message: string;
+    severity: string;
+    target: string;
+    details: any[];
+}
 
 /**
  * @namespace apps.dflc.customerregistrationts
  */
 export default class Worklist extends BaseController {
+
+    //IF you want to call static method of class Attachments, you nedd do add on view or fragment .attachmentsHandler.method
+    //public attachmentsHandler = Attachments;
+
+    private oI18n: ResourceBundle;
+
     /**
      * Called when the worklist controller is instantiated.
      *
@@ -24,7 +63,238 @@ export default class Worklist extends BaseController {
             tableNoDataText: this.getResourceBundle().getText("tableNoDataText")
         });
         this.setModel(viewModel, "worklistView");
+
+        this.initializeMessageManageModel();
+
+        this.oI18n = this.getResourceBundle();
     }
+
+    //Methods custom public
+    public onSortItems(event: Event) {
+
+        const oSorter = new Sorter('CustomerName', false);
+        const oTable = this.byId("table") as Table;
+        const oBinding = oTable.getBinding("items") as ListBinding;
+        // Apply the sorter to the binding of the table to sort the items based on the specified criteria
+        oBinding.sort(oSorter);
+
+    }
+
+    public onSearchTwo(event: Event) {
+
+        const tableSearchState: Filter[] = [];
+        var sQuery = event.getParameter("query");
+
+        if (sQuery && sQuery.length > 0) {
+            tableSearchState.push(new Filter("CustomerName", FilterOperator.Contains, sQuery));
+        }
+
+        const oTable = this.byId("table") as Table;
+        const oBinding = oTable.getBinding("items") as ListBinding;
+        oBinding.filter(tableSearchState);
+
+    }
+
+    //READ ODATA v2
+    public onPressSearch(event: Event) {
+
+        const oModel = this.getView()?.getModel() as ODataModel;
+
+        oModel.read("/Customers('00001')",
+            //Filters
+            //Sorter
+            {
+
+                success: (data: any) => {
+                    // handle successful data retrieval
+                },
+                error: (error: any) => {
+                    // handle error
+                }
+            });
+
+    }
+
+    public onPressCustomerRead(event: Event) {
+
+
+        const oFilters: Filter[] = [];
+        const oSorter = new Sorter('CustomerID', false);
+
+        const oTable = this.byId("table") as Table;
+        const oBinding = oTable.getBindingInfo("items") as AggregationBindingInfo;
+
+        oTable.bindAggregation('items', {
+            model: oBinding.model,
+            path: '/Customers',
+            template: oBinding.template,
+            sorter: [oSorter],
+            filters: oFilters
+        });
+
+    }
+
+
+    public onCustomerDelete(oEvent: Event) {
+
+        const oModel = this.getView()?.getModel() as ODataModel;
+        const oSelectedItem = oEvent.getParameter("listItem");
+        const sPath = oSelectedItem.getBindingContext().getPath();
+
+        this.clearAllMessages();
+
+        oModel.remove(sPath, {
+            success: (oData: any, response: OdataResponseType) => {
+
+                //this.processSapMessageFromResponse(response, oModel);
+                MessageToast.show(this.oI18n?.getText("customerDeletedSuccessfully") as string)
+
+            },
+            error: (error: any) => {
+                // handle error
+                MessageToast.show(this.oI18n?.getText("erroToDeleteCustomer") as string)
+            }
+        });
+    }
+
+
+    public onCustomerDeleteTwo(oEvent: Event) {
+        const oTable = this.byId("table") as Table;
+        const oModel = this.getView()?.getModel() as ODataModel;
+        const oItens = oTable.getSelectedContexts();
+
+        this.clearAllMessages();
+
+        for (const oItem of oItens) {
+            oModel.remove(oItem.getPath(), {
+
+                success: (oData: any, response: OdataResponseType) => {
+
+                    //this.processSapMessageFromResponse(response, oModel);
+                    MessageToast.show(this.oI18n?.getText("customerDeletedSuccessfully") as string)
+                    
+                },
+                error: (error: any) => {
+                    // handle error
+                    MessageToast.show(this.oI18n?.getText("erroToDeleteCustomer") as string)
+                }
+            });
+        }
+
+    }
+
+    public onPressCustomerCreate(oEvent: Event) {
+
+        const oRouter = this.getRouter();
+        oRouter.navTo("create", {});
+
+    }
+
+    public onChangeStatus(oEvent: Event): void {
+        try {
+            const oView = this.getView();
+            if (!oView) {
+                console.error("View not found");
+                return;
+            }
+
+            const oSource = oEvent.getSource() as Button;
+            if (!oSource) {
+                console.error("Event source not found");
+                return;
+            }
+
+            const oParent = oSource.getParent() as ColumnListItem;
+            if (!oParent) {
+                console.error("Parent control not found");
+                return;
+            }
+
+            const oBindingContext = oParent.getBindingContext() as Context;
+            if (!oBindingContext) {
+                console.error("Binding context not found");
+                return;
+            }
+
+            const oObject = oBindingContext.getObject() as CustomerObject;
+            if (!oObject || !oObject.CustomerID) {
+                console.error("Client object or ID not found");
+                return;
+            }
+
+            const oModel = oView.getModel() as ODataModel;
+            if (!oModel) {
+                console.error("Model not found");
+                return;
+            }
+
+            this.clearAllMessages();
+
+            oModel.callFunction(
+                "/ChangeStatus", {
+                method: "GET",
+                urlParameters: {
+                    CustomerID: oObject.CustomerID
+                },
+                success: (oData: any, response: OdataResponseType) => {
+                    //MessageToast.show('Client status updated successfully.');
+                    // Optional: Refresh the data
+                    //this.processSapMessageFromResponse(response, oModel);
+                    //oModel.refresh();
+                },
+                error: (e: any) => {
+                    console.error("Error updating client status:", e);
+                    let errorMessage = "Error updating client status";
+
+                    if (e.message) {
+                        errorMessage = e.message;
+                    } else if (e.responseText) {
+                        try {
+                            const oError = JSON.parse(e.responseText);
+                            errorMessage = oError.error?.message?.value || errorMessage;
+                        } catch (parseError) {
+                            // Ignore parse error
+                        }
+                    }
+
+                    MessageToast.show(errorMessage);
+                }
+            }
+            );
+
+        } catch (error) {
+            console.error("Unexpected error in onChangeStatus:", error);
+            MessageToast.show("Unexpected error occurred");
+        }
+    }
+
+    //Add SAP Message on Delete
+    public processSapMessageFromResponse(response: OdataResponseType, model?: JSONModel | ODataModel): void {
+
+        if (!response || !response.headers) {
+            return;
+        }
+
+        // Buscar o header sap-message (case insensitive)
+        const sapMessageHeader = response.headers["sap-message"] || response.headers["SAP-Message"];
+
+        if (!sapMessageHeader) {
+            return;
+        }
+
+        try {
+            const oSapMessage: SapMessageType = JSON.parse(sapMessageHeader);
+
+            this.addGenericMessageToMessageManager(oSapMessage.message, oSapMessage?.severity as MessageType, model);
+
+        } catch (error) {
+            console.error("Error to process sap-message:", error);
+            this.addGenericMessageToMessageManager(`Error ao process message: ${sapMessageHeader}`, MessageType.Error, model);
+        }
+    }
+
+    //AttachmentsMethods
+
 
     /**
      * Triggered by the table's 'updateFinished' event: after new table
@@ -72,7 +342,7 @@ export default class Worklist extends BaseController {
             var sQuery = event.getParameter("query");
 
             if (sQuery && sQuery.length > 0) {
-                tableSearchState.push(new Filter("Name", FilterOperator.Contains, sQuery));
+                tableSearchState.push(new Filter("CustomerName", FilterOperator.Contains, sQuery));
             }
             this.applySearch(tableSearchState);
         }
@@ -94,7 +364,7 @@ export default class Worklist extends BaseController {
      */
     private showObject(item: ObjectListItem) {
         this.getRouter().navTo("object", {
-            objectId: item.getBindingContext()!.getPath().substring("/SEPMRA_C_PD_Product".length)
+            objectId: item.getBindingContext()!.getPath().substring("/Customers".length)
         });
     }
 

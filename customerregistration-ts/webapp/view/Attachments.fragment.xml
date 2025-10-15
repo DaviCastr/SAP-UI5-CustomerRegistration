@@ -1,0 +1,100 @@
+<c:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    xmlns:u="sap.ui.unified"
+    c:require="{ handler: 'apps/dflc/customerregistrationts/controller/Attachments'}"
+>
+    <VBox >
+        <Table
+            id="tableAttachment"
+            width="auto"
+            mode="MultiSelect"
+            items="{
+            path: '/Attachments',
+            sorter: {
+                path: 'FileName',
+                descending: false
+                }
+            }"
+            noDataText="{worklistView>/tableNoDataText}"
+            busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+            growing="true"
+            growingScrollToLoad="true"
+            updateFinished=".onUpdateFinished"
+        >
+            <headerToolbar>
+                <OverflowToolbar>
+                    <Title
+                        id="tableAttachmentHeader"
+                        text="Attachments"
+                        level="H3"
+                    />
+                    <ToolbarSpacer />
+                    <Button
+                        icon="sap-icon://delete"
+                        type="Negative"
+                        press="handler.handleAttachmentDelete"
+                    />
+                    <Button
+                        icon="sap-icon://edit"
+                        type="Critical"
+                        press="handler.handleAttachmentChange"
+                    />
+                    <u:FileUploader
+                        id="fileUploader"
+                        name="myFileUpload"
+                        useMultipart="false"
+                        uploadUrl="/sap/opu/odata/sap/Y1_SALES_MONITOR_DFLC_SRV/Attachments"
+                        tooltip="Upload your file to the local server"
+                        uploadComplete="handler.handleUploadComplete"
+                    />
+                    <Button
+                        text="{i18n>btnUpload}"
+                        press="handler.handleUploadPress"
+                        icon="sap-icon://upload"
+                        type="Success"
+                    />
+                   
+                    
+                    
+                </OverflowToolbar>
+            </headerToolbar>
+
+            <columns>
+                <Column>
+                    <Text text="{i18n>columnAttachmentName}" />
+                </Column>
+                <Column hAlign="End">
+                    <Text text="{i18n>columnAttachmentFile}" />
+                </Column>
+            </columns>
+
+            <items>
+                <ColumnListItem
+                    type="Navigation"
+                    press="handler.handlePressAttachment"
+                >
+                    <cells>
+                        <ObjectIdentifier title="{FileName}" />
+
+                        <ObjectAttribute
+                            text="{MimeType}"
+                            active="true"
+                            press="handler.onPressAtachment"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+    <HBox justifyContent="Center" alignItems="Center" width="100%">
+        <Image 
+            id="image"
+            src="data:{MimeType};base64, {Value}"
+            height="100%"
+            width="100%"
+        />
+
+        </HBox>
+    </VBox>
+</c:FragmentDefinition>

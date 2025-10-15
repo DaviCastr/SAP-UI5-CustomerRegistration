@@ -2,30 +2,123 @@
     controllerName="apps.dflc.customerregistrationts.controller.Object"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:semantic="sap.f.semantic">
-
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns:semantic="sap.f.semantic"
+>
     <semantic:SemanticPage
-        id="page"
+        id="pageDetails"
         headerPinnable="false"
         toggleHeaderOnTitleClick="false"
         busy="{objectView>/busy}"
-        busyIndicatorDelay="{objectView>/delay}">
-
+        busyIndicatorDelay="{objectView>/delay}"
+        showFooter="true"
+    >
         <semantic:titleHeading>
             <Title
                 text="{CustomerName}"
-                level="H2"/>
+                level="H2"
+            />
         </semantic:titleHeading>
 
         <semantic:headerContent>
-            <ObjectNumber
-                unit="{UF}" />
+            <ObjectNumber unit="{UF}" />
         </semantic:headerContent>
 
         <semantic:sendEmailAction>
-            <semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
+            <semantic:SendEmailAction
+                id="shareEmail"
+                press=".onShareEmailPress"
+            />
         </semantic:sendEmailAction>
 
-    </semantic:SemanticPage>
+        <l:VerticalLayout width="100%">
+            <f:SimpleForm
+                editable="true"
+                layout="ResponsiveGridLayout"
+                labelSpanXL="3"
+                labelSpanL="3"
+                labelSpanM="3"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="4"
+                emptySpanL="4"
+                emptySpanM="4"
+                emptySpanS="0"
+                columnsXL="1"
+                columnsL="1"
+                columnsM="1"
+                singleContainerFullSize="false"
+            >
+                <Label text="{i18n>tableCodeColumnTitle}" />
+                <Text text="{CustomerID}" />
 
+                <Label text="{i18n>tableNameColumnTitle}" />
+                <Input
+                    value="{CustomerName}"
+                    id="inputCustomerName"
+                />
+
+                <Label text="{i18n>tablePhoneColumnTitle}" />
+                <Input value="{Phone}" />
+
+                <Label text="{i18n>tableUnitNumberColumnTitle}" />
+                <Input value="{UF}" />
+            </f:SimpleForm>
+
+            <List
+                growing="true"
+                growingScrollToLoad="true"
+                growingThreshold="20"
+                id="vendasListCliente"
+                headerText="Lista de Vendas"
+                class="sapUiResponsiveMargin"
+                width="auto"
+                items="{
+                        path : 'sales',
+                        sorter: {
+                        path: 'CreationDate',
+                        descending: true
+                        },
+                        parameters:{
+                            expand: 'customer'
+                        }
+                    }"
+            >
+                <items>
+                    <ObjectListItem
+                        title="{Description}"
+                        number="{NetValue}"
+                        numberState="{=	${NetValue} > 500 ? 'Error' : 'Success' }"
+                    >
+                        <attributes>
+                            <ObjectAttribute text="{SaleID}" />
+                            <ObjectAttribute text="{CreationDate}" />
+                            <ObjectAttribute text="{customer/Email}" />
+                        </attributes>
+                    </ObjectListItem>
+                </items>
+            </List>
+        </l:VerticalLayout>
+
+        <semantic:positiveAction>
+			<semantic:PositiveAction text="{i18n>btnSave}" press="onSaveTwo" />
+		</semantic:positiveAction>
+
+		<semantic:negativeAction>
+			<semantic:NegativeAction text="{i18n>btnCancel}"  press="onCancel" />
+		</semantic:negativeAction>
+
+        <semantic:footerCustomActions>
+            <Button
+                id="_IDGenButton7"
+                icon="sap-icon://alert"
+                text="{= ${messageManager>/}.length }"
+                visible="{= ${messageManager>/}.length > 0 }"
+                type="Emphasized"
+                press="onMessagePopoverPress"
+            />
+        </semantic:footerCustomActions>
+
+    </semantic:SemanticPage>
 </mvc:View>

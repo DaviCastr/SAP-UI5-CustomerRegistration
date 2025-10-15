@@ -2,84 +2,233 @@
     controllerName="apps.dflc.customerregistrationts.controller.Worklist"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:semantic="sap.f.semantic">
-
+    xmlns:semantic="sap.f.semantic"
+    xmlns:core="sap.ui.core"
+>
     <semantic:SemanticPage
         id="page"
         headerPinnable="false"
-        toggleHeaderOnTitleClick="false">
-
+        toggleHeaderOnTitleClick="false"
+        showFooter="{= ${messageManager>/}.length > 0 }"
+    >
         <semantic:titleHeading>
             <Title
+                id="_IDGenTitle"
                 text="{i18n>worklistTitle}"
-                level="H2"/>
+                level="H2"
+            />
         </semantic:titleHeading>
 
         <semantic:content>
-            <Table
-                id="table"
-                width="auto"
-                items="{
-                    path: '/Customers',
-                    sorter: {
-                        path: 'CustomerName',
-                        descending: false
-                    }
-                }"
-                noDataText="{worklistView>/tableNoDataText}"
-                busyIndicatorDelay="{worklistView>/tableBusyDelay}"
-                growing="true"
-                growingScrollToLoad="true"
-                updateFinished=".onUpdateFinished">
-
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <Title
-                            id="tableHeader"
-                            text="{worklistView>/worklistTableTitle}"
-                            level="H3"/>
-                        <ToolbarSpacer />
-                        <SearchField
-                            id="searchField"
-                            tooltip="{i18n>worklistSearchTooltip}"
-                            search=".onSearch">
-                            <layoutData>
-                                <OverflowToolbarLayoutData
-                                    maxWidth="200px"
-                                    priority="NeverOverflow"/>
-                            </layoutData>
-                        </SearchField>
-                    </OverflowToolbar>
-                </headerToolbar>
-
-                <columns>
-                    <Column id="nameColumn">
-                        <Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
-                    </Column>
-                    <Column id="unitNumberColumn" hAlign="End">
-                        <Text text="{i18n>tableUnitNumberColumnTitle}" id="unitNumberColumnTitle"/>
-                    </Column>
-                </columns>
-
+            <IconTabBar
+                id="idIconTabBarFiori2"
+                upperCase="true"
+                expanded="{device>/isNoPhone}"
+                selectedKey="key1"
+                class="sapUiResponsiveContentPadding"
+            >
                 <items>
-                    <ColumnListItem
-                        type="Navigation"
-                        press=".onPress">
-                        <cells>
-                            <ObjectIdentifier
-                                title="{CustomerName}"/>
-                            <ObjectNumber
-                                unit="{UF}" />
-                        </cells>
-                    </ColumnListItem>
+                    <IconTabFilter
+                        id="_IDGenIconTabFilter"
+                        text="{i18n>worklistTableTitle}"
+                        key="key1"
+                    >
+                        <content>
+                            <Table
+                                id="table"
+                                width="auto"
+                                mode="MultiSelect"
+                                delete="onCustomerDelete"
+                                items="{ path: '/Customers',
+                                         sorter: { path: 'CustomerID',
+                                                   descending: false } }"
+                                noDataText="{worklistView>/tableNoDataText}"
+                                busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+                                growing="true"
+                                growingScrollToLoad="false"
+                                growingThreshold="20"
+                                updateFinished=".onUpdateFinished"
+                            >
+                                <headerToolbar>
+                                    <OverflowToolbar id="_IDGenOverflowToolbar">
+                                        <Title
+                                            id="tableHeader"
+                                            text="{worklistView>/worklistTableTitle}"
+                                            level="H3"
+                                        />
+                                        <ToolbarSpacer
+                                            id="_IDGenToolbarSpacer"
+                                        />
+                                        <Button
+                                            id="_IDGenButton"
+                                            type="Emphasized"
+                                            text="{i18n>btnCreateCustomer}"
+                                            press=".onPressCustomerCreate"
+                                        />
+                                        <Button
+                                            id="_IDGenButton1"
+                                            icon="sap-icon://delete"
+                                            type="Negative"
+                                            press="onCustomerDeleteTwo"
+                                        />
+                                        <Button
+                                            id="_IDGenButton2"
+                                            text="{i18n>btnCustomerSearch}"
+                                            press=".onPressCustomerRead"
+                                        />
+                                        <Button
+                                            id="_IDGenButton3"
+                                            text="{i18n>btnSearch}"
+                                            press=".onPressSearch"
+                                        />
+                                        <Button
+                                            id="_IDGenButton4"
+                                            text="{i18n>btnSort}"
+                                            press=".onSortItems"
+                                        />
+                                        <SearchField
+                                            id="searchField"
+                                            tooltip="{i18n>worklistSearchTooltip}"
+                                            search=".onSearchTwo"
+                                        >
+                                            <layoutData>
+                                                <OverflowToolbarLayoutData
+                                                    id="_IDGenOverflowToolbarLayoutData"
+                                                    maxWidth="200px"
+                                                    priority="NeverOverflow"
+                                                />
+                                            </layoutData>
+                                        </SearchField>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+
+                                <columns>
+                                    <Column id="codeColumn">
+                                        <Text
+                                            text="{i18n>tableCodeColumnTitle}"
+                                            id="codeColumnTitle"
+                                        />
+                                    </Column>
+                                    <Column id="nameColumn">
+                                        <Text
+                                            text="{i18n>tableNameColumnTitle}"
+                                            id="nameColumnTitle"
+                                        />
+                                    </Column>
+                                    <Column
+                                        id="unitNumberColumn"
+                                        hAlign="End"
+                                    >
+                                        <Text
+                                            text="{i18n>tableUnitNumberColumnTitle}"
+                                            id="unitNumberColumnTitle"
+                                        />
+                                    </Column>
+
+                                    <Column
+                                        id="_IDGenColumn"
+                                        hAlign="End"
+                                    >
+                                        <Text
+                                            id="_IDGenText"
+                                            text="{i18n>tableStatusColumnTitle}"
+                                        />
+                                    </Column>
+
+                                    <Column
+                                        id="_IDGenColumn1"
+                                        hAlign="End"
+                                    >
+                                        <Text
+                                            id="_IDGenText1"
+                                            text="{i18n>tableChangeColumnTitle}"
+                                        />
+                                    </Column>
+                                </columns>
+
+                                <items>
+                                    <ColumnListItem
+                                        id="_IDGenColumnListItem"
+                                        type="Navigation"
+                                        press=".onPress"
+                                    >
+                                        <cells>
+                                            <ObjectIdentifier
+                                                id="_IDGenObjectIdentifier"
+                                                title="{CustomerID}"
+                                            />
+                                            <ObjectIdentifier
+                                                id="_IDGenObjectIdentifier1"
+                                                title="{CustomerName}"
+                                            />
+                                            <ObjectStatus
+                                                id="_IDGenObjectStatus"
+                                                text="{UF}"
+                                            />
+                                            <ObjectStatus
+                                                id="_IDGenObjectStatus1"
+                                                text="{Status}"
+                                            />
+
+                                            <Button
+                                                id="_IDGenButton5"
+                                                icon="sap-icon://letter"
+                                                press="onChangeStatus"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </content>
+                    </IconTabFilter>
+
+                    <IconTabFilter
+                        text="{i18n>titleSales}"
+                        key="key2"
+                    >
+                        <content>
+                            <core:Fragment
+                                fragmentName="apps.dflc.customerregistrationts.view.Sales"
+                                type="XML"
+                            />
+                        </content>
+                    </IconTabFilter>
+
+                    <IconTabFilter
+                        id="_IDGenIconTabFilter1"
+                        text="{i18n>AttachmentsTitle}"
+                        key="key3"
+                    >
+                        <content>
+                            <core:Fragment
+                                id="_IDGenFragment1"
+                                fragmentName="apps.dflc.customerregistrationts.view.Attachments"
+                                type="XML"
+                            />
+
+                        </content>
+                    </IconTabFilter>
+                    <core:ExtensionPoint name="ExtWorklistTab" />
                 </items>
-            </Table>
+            </IconTabBar>
         </semantic:content>
 
         <semantic:sendEmailAction>
-            <semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
+            <semantic:SendEmailAction
+                id="shareEmail"
+                press=".onShareEmailPress"
+            />
         </semantic:sendEmailAction>
 
+        <semantic:footerCustomActions>
+            <Button
+                id="_IDGenButton6"
+                icon="sap-icon://alert"
+                text="{= ${messageManager>/}.length }"
+                visible="{= ${messageManager>/}.length > 0 }"
+                type="Emphasized"
+                press="onMessagePopoverPress"
+            />
+        </semantic:footerCustomActions>
     </semantic:SemanticPage>
-
 </mvc:View>
