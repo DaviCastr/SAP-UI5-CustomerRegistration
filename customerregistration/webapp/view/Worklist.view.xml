@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="apps.dflc.customerregistration.controller.Worklist"
+    controllerName="apps.dflc.customerregistrationts.controller.Worklist"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:semantic="sap.f.semantic"
@@ -59,6 +59,9 @@
                                         <ToolbarSpacer
                                             id="_IDGenToolbarSpacer"
                                         />
+
+                                        <core:ExtensionPoint name="ExtWorklistTablePanel" />
+
                                         <Button
                                             id="_IDGenButton"
                                             type="Emphasized"
@@ -188,7 +191,7 @@
                     >
                         <content>
                             <core:Fragment
-                                fragmentName="apps.dflc.customerregistration.view.Sales"
+                                fragmentName="apps.dflc.customerregistrationts.view.Sales"
                                 type="XML"
                             />
                         </content>
@@ -202,13 +205,15 @@
                         <content>
                             <core:Fragment
                                 id="_IDGenFragment1"
-                                fragmentName="apps.dflc.customerregistration.view.Attachments"
+                                fragmentName="apps.dflc.customerregistrationts.view.Attachments"
                                 type="XML"
                             />
 
                         </content>
                     </IconTabFilter>
-                    <core:ExtensionPoint name="ExtWorklistTab" />
+
+                    <core:ExtensionPoint name="ExtWorklistTable" />
+
                 </items>
             </IconTabBar>
         </semantic:content>

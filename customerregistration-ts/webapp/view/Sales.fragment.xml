@@ -12,7 +12,7 @@
         items="{/Sales}"
     >
         <items>
-            <core:ExtensionPoint name="VendaItemList">
+            <core:ExtensionPoint name="SalesItemList">
                 <ObjectListItem id="_IDGenObjectListItem2"
                     title="{Description}"
                     number="{

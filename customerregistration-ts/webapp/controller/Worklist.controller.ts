@@ -15,12 +15,17 @@ import Button from "sap/m/Button";
 import Context from "sap/ui/model/Context";
 import ColumnListItem from "sap/m/ColumnListItem";
 import { MessageType } from "sap/ui/core/library";
+import Object from "./Object.controller";
 //import Attachments from "apps/dflc/customerregistrationts/controller/Attachments";
 
 interface CustomerObject {
     CustomerID: string;
+    CustomerName: string;
+    Phone: string;
+    UF: string;
+    Email: string;
+    Status: string;
 }
-
 
 //Return Delete Customer
 interface OdataResponseType {
@@ -38,6 +43,11 @@ interface SapMessageType {
     severity: string;
     target: string;
     details: any[];
+}
+
+//Extend object
+interface ExtendedController {
+    onChangeStatusCheck?: (object: CustomerObject) => void;
 }
 
 /**
@@ -220,6 +230,10 @@ export default class Worklist extends BaseController {
             if (!oObject || !oObject.CustomerID) {
                 console.error("Client object or ID not found");
                 return;
+            }
+
+            if((this as ExtendedController).onChangeStatusCheck){
+                 (this as ExtendedController).onChangeStatusCheck!(oObject);
             }
 
             const oModel = oView.getModel() as ODataModel;

@@ -59,6 +59,9 @@
                                         <ToolbarSpacer
                                             id="_IDGenToolbarSpacer"
                                         />
+
+                                        <core:ExtensionPoint name="ExtWorklistTablePanel" />
+
                                         <Button
                                             id="_IDGenButton"
                                             type="Emphasized"
@@ -208,7 +211,9 @@
 
                         </content>
                     </IconTabFilter>
-                    <core:ExtensionPoint name="ExtWorklistTab" />
+
+                    <core:ExtensionPoint name="ExtWorklistTable" />
+
                 </items>
             </IconTabBar>
         </semantic:content>

@@ -1,4 +1,4 @@
-sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/model/json/JSONModel", "./BaseController", "sap/ui/model/Sorter", "sap/m/MessageToast", "sap/ui/core/library"], function(Filter, FilterOperator, JSONModel, __BaseController, Sorter, MessageToast, sap_ui_core_library) {
+sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/model/json/JSONModel", "./BaseController", "sap/ui/model/Sorter", "sap/m/MessageToast", "sap/ui/core/library"], function (Filter, FilterOperator, JSONModel, __BaseController, Sorter, MessageToast, sap_ui_core_library) {
     "use strict";
 
     function _interopRequireDefault(obj) {
@@ -30,7 +30,7 @@ sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/mod
         },
         //Methods custom public
         onSortItems: function _onSortItems(event) {
-            const oSorter = new Sorter('CustomerName',false);
+            const oSorter = new Sorter('CustomerName', false);
             const oTable = this.byId("table");
             const oBinding = oTable.getBinding("items");
             // Apply the sorter to the binding of the table to sort the items based on the specified criteria
@@ -40,7 +40,7 @@ sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/mod
             const tableSearchState = [];
             var sQuery = event.getParameter("query");
             if (sQuery && sQuery.length > 0) {
-                tableSearchState.push(new Filter("CustomerName",FilterOperator.Contains,sQuery));
+                tableSearchState.push(new Filter("CustomerName", FilterOperator.Contains, sQuery));
             }
             const oTable = this.byId("table");
             const oBinding = oTable.getBinding("items");
@@ -50,18 +50,18 @@ sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/mod
         onPressSearch: function _onPressSearch(event) {
             const oModel = this.getView()?.getModel();
             oModel.read("/Customers('00001')", //Filters
-            //Sorter
-            {
-                success: data => {// handle successful data retrieval
-                }
-                ,
-                error: error => {// handle error
-                }
-            });
+                //Sorter
+                {
+                    success: data => {// handle successful data retrieval
+                    }
+                    ,
+                    error: error => {// handle error
+                    }
+                });
         },
         onPressCustomerRead: function _onPressCustomerRead(event) {
             const oFilters = [];
-            const oSorter = new Sorter('CustomerID',false);
+            const oSorter = new Sorter('CustomerID', false);
             const oTable = this.byId("table");
             const oBinding = oTable.getBindingInfo("items");
             oTable.bindAggregation('items', {
@@ -139,6 +139,11 @@ sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/mod
                     console.error("Client object or ID not found");
                     return;
                 }
+
+                if (this.onChangeStatusCheck) {
+                    this.onChangeStatusCheck(oObject);
+                }
+
                 const oModel = oView.getModel();
                 if (!oModel) {
                     console.error("Model not found");
@@ -151,9 +156,9 @@ sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/mod
                         CustomerID: oObject.CustomerID
                     },
                     success: (oData, response) => {//MessageToast.show('Client status updated successfully.');
-                    // Optional: Refresh the data
-                    //this.processSapMessageFromResponse(response, oModel);
-                    //oModel.refresh();
+                        // Optional: Refresh the data
+                        //this.processSapMessageFromResponse(response, oModel);
+                        //oModel.refresh();
                     }
                     ,
                     error: e => {
@@ -239,7 +244,7 @@ sap.ui.define(["sap/ui/model/Filter", "sap/ui/model/FilterOperator", "sap/ui/mod
                 const tableSearchState = [];
                 var sQuery = event.getParameter("query");
                 if (sQuery && sQuery.length > 0) {
-                    tableSearchState.push(new Filter("CustomerName",FilterOperator.Contains,sQuery));
+                    tableSearchState.push(new Filter("CustomerName", FilterOperator.Contains, sQuery));
                 }
                 this.applySearch(tableSearchState);
             }
