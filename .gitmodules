@@ -1,0 +1,3 @@
+[submodule "SAP-UI5-CustomerRegistrationExtension"]
+	path = SAP-UI5-CustomerRegistrationExtension
+	url = https://github.com/DaviCastr/SAP-UI5-CustomerRegistrationExtension.git
