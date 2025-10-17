@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="apps.dflc.customerregistrationts.controller.Worklist"
+    controllerName="apps.dflc.customerregistration.controller.Worklist"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns:semantic="sap.f.semantic"
@@ -191,7 +191,7 @@
                     >
                         <content>
                             <core:Fragment
-                                fragmentName="apps.dflc.customerregistrationts.view.Sales"
+                                fragmentName="apps.dflc.customerregistration.view.Sales"
                                 type="XML"
                             />
                         </content>
@@ -205,7 +205,7 @@
                         <content>
                             <core:Fragment
                                 id="_IDGenFragment1"
-                                fragmentName="apps.dflc.customerregistrationts.view.Attachments"
+                                fragmentName="apps.dflc.customerregistration.view.Attachments"
                                 type="XML"
                             />
 
